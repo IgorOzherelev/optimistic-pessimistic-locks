@@ -3,10 +3,7 @@ package sber.ru.dss.dsshomeworks.entities;
 import lombok.*;
 import org.hibernate.Hibernate;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
@@ -23,6 +20,10 @@ public class Account {
 
     @Column(name = "sum")
     private Integer sum;
+
+    @Version
+    @Column(name = "opt_lock")
+    private Integer versionNum;
 
     @Override
     public boolean equals(Object o) {
