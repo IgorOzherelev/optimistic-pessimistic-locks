@@ -15,12 +15,21 @@ public class AccountController {
         this.accountService = accountService;
     }
 
-    @RequestMapping(path = "/transact/{fromId}/{toId}/{sum}", method = RequestMethod.GET)
-    public ResponseEntity<String> transact(@PathVariable Long fromId,
-                                           @PathVariable Long toId, @PathVariable Integer sum) {
+    @RequestMapping(path = "/optimistic/{fromId}/{toId}/{sum}", method = RequestMethod.GET)
+    public ResponseEntity<String> transactOptimistic(@PathVariable Long fromId,
+                                                     @PathVariable Long toId, @PathVariable Integer sum) {
 
         accountService.transactOptimistic(fromId, toId, sum);
 
-        return ResponseEntity.ok("Sent sum from " + fromId + " to " + toId + " " + sum);
+        return ResponseEntity.ok("transactOptimistic Sent sum from " + fromId + " to " + toId + " " + sum);
+    }
+
+    @RequestMapping(path = "/pessimistic/{fromId}/{toId}/{sum}", method = RequestMethod.GET)
+    public ResponseEntity<String> transactPessimistic(@PathVariable Long fromId,
+                                                     @PathVariable Long toId, @PathVariable Integer sum) {
+
+        accountService.transactPessimistic(fromId, toId, sum);
+
+        return ResponseEntity.ok("transactPessimistic Sent sum from " + fromId + " to " + toId + " " + sum);
     }
 }

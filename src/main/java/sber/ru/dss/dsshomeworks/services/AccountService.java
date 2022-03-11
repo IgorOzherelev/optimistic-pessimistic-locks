@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import sber.ru.dss.dsshomeworks.daos.AccountDao;
 import sber.ru.dss.dsshomeworks.entities.Account;
 
-import javax.persistence.OptimisticLockException;
 import javax.transaction.Transactional;
 
 @Service
@@ -16,17 +15,21 @@ import javax.transaction.Transactional;
 public class AccountService {
     private final AccountDao accountDao;
 
+    private int attemptCounter = 0;
+
     @Autowired
     public AccountService(AccountDao accountDao) {
         this.accountDao = accountDao;
     }
 
     // optimistic lock usage with retryable
-    @Retryable(OptimisticLockException.class)
+    @Retryable(StaleStateException.class)
     @Transactional
     public void transactOptimistic(Long fromId, Long toId, Integer sum) {
         Account accountFrom = accountDao.getAccountByIdOptimistic(fromId);
         Account accountTo = accountDao.getAccountByIdOptimistic(toId);
+
+        log.info(String.valueOf(attemptCounter++)); // dummy retryable checking
 
         if (accountFrom.getSum() < sum) {
             throw new IllegalStateException("Account from doesn't have enough money");
