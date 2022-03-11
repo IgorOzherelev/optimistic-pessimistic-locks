@@ -25,7 +25,7 @@ public class AccountDao {
         return em.find(Account.class, id, LockModeType.OPTIMISTIC_FORCE_INCREMENT);
     }
 
-    public void updateAccountSumByIdOptimistic(Account account, Integer sum) {
+    public void updateAccountSumById(Account account, Integer sum) {
         Query query = em.createQuery("update Account acc set acc.sum = :sum" +
                 " where acc.id = :id and acc.versionNum = :versionNum");
 
@@ -38,13 +38,6 @@ public class AccountDao {
 
     public void updateAccountSumByIdPessimistic(Account account, Integer sum) {
         em.lock(account, LockModeType.PESSIMISTIC_WRITE);
-
-        Query query = em.createQuery("update Account acc set acc.sum = :sum" +
-                " where acc.id = :id");
-
-        query.setParameter("id", account.getId());
-        query.setParameter("sum", account.getSum() - sum);
-
-        query.executeUpdate();
+        updateAccountSumById(account, sum);
     }
 }

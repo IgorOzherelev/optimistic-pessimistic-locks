@@ -33,8 +33,8 @@ public class AccountService {
 
         checkAccountSum(sum, accountFrom);
 
-        accountDao.updateAccountSumByIdOptimistic(accountFrom, sum);
-        accountDao.updateAccountSumByIdOptimistic(accountTo, -sum);
+        accountDao.updateAccountSumById(accountFrom, sum);
+        accountDao.updateAccountSumById(accountTo, -sum);
     }
 
     @Transactional
