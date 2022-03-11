@@ -5,6 +5,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import sber.ru.dss.dsshomeworks.services.AccountService;
 
+
+/**
+ * выбраны get запросы, чтобы ходить через браузер
+ * */
 @RestController
 @RequestMapping("/accounts")
 public class AccountController {

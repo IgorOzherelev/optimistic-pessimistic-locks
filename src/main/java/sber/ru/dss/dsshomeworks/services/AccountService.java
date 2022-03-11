@@ -29,11 +29,9 @@ public class AccountService {
         Account accountFrom = accountDao.getAccountByIdOptimistic(fromId);
         Account accountTo = accountDao.getAccountByIdOptimistic(toId);
 
-        log.info(String.valueOf(attemptCounter++)); // dummy retryable checking
+        log.info("attemptCounter: " + attemptCounter++); // dummy retryable checking
 
-        if (accountFrom.getSum() < sum) {
-            throw new IllegalStateException("Account from doesn't have enough money");
-        }
+        checkAccountSum(sum, accountFrom);
 
         accountDao.updateAccountSumByIdOptimistic(accountFrom, sum);
         accountDao.updateAccountSumByIdOptimistic(accountTo, -sum);
@@ -41,6 +39,18 @@ public class AccountService {
 
     @Transactional
     public void transactPessimistic(Long fromId, Long toId, Integer sum) {
+        Account accountFrom = accountDao.getAccountByIdPessimistic(fromId);
+        Account accountTo = accountDao.getAccountByIdPessimistic(toId);
 
+        checkAccountSum(sum, accountFrom);
+
+        accountDao.updateAccountSumByIdPessimistic(accountFrom, sum);
+        accountDao.updateAccountSumByIdPessimistic(accountTo, -sum);
+    }
+
+    private void checkAccountSum(Integer sum, Account accountFrom) {
+        if (accountFrom.getSum() < sum) {
+            throw new IllegalStateException("Account from doesn't have enough money");
+        }
     }
 }
